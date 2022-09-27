@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.javasm.mapper.GoodMapper">
+
+
+    <resultMap id="baseMap" type="com.javasm.domin.vo.GoodVo">
+        <id property="id" column="id"/>
+        <id property="goodName" column="good_name"/>
+        <id property="goodDesc" column="good_desc"/>
+        <id property="goodPrice" column="good_price"/>
+        <id property="goodContent" column="good_content"/>
+        <id property="goodImg" column="good_img"/>
+        <association property="brandName" select="com.javasm.mapper.BrandMapper.getBrandNameById"
+                     column="brand_id"/>
+
+    </resultMap>
+
+
+    <select id="searchCriteria" parameterType="com.javasm.domin.criteria.GoodCriteria"
+            resultMap="baseMap">
+        select * from base_good
+        <where>
+            <if test="goodName!=null and goodName!=''">
+                and good_name like '%${goodName}%'
+            </if>
+
+            <if test="goodDesc!=null and goodDesc!=''">
+                and good_desc like '%${goodDesc}%'
+            </if>
+
+            <if test="startTime!=null and endTime!=''">
+                and create_time between #{startTime}  and #{endTime}
+            </if>
+
+            <if test="brandId!=null and brandId!=0">
+                and brand_id=#{brandId}
+            </if>
+
+        </where>
+
+
+
+    </select>
+
+
+</mapper>

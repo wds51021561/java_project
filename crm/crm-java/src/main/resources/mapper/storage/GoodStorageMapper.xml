@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.javasm.storage.mapper.GoodStorageMapper">
+
+    <resultMap id="baseMap" type="com.javasm.storage.entity.GoodStorage">
+        <id property="id" column="id"/>
+        <id property="goodId" column="good_id"/>
+        <id property="goodSerial" column="good_serial"/>
+        <id property="storageId" column="storage_id"/>
+        <id property="goodBusiness" column="good_business"/>
+        <id property="goodState" column="good_state"/>
+        <id property="createTime" column="create_time"/>
+        <id property="modifyTime" column="modify_time"/>
+    </resultMap>
+
+    <sql id="allColumn">
+        g
+        .id,g.good_id,g.good_serial,g.good_business,g.good_state,g.create_time,g.modify_time
+    </sql>
+
+
+    <select id="queryByStorageFormCode" parameterType="string" resultMap="baseMap">
+        select
+        <include refid="allColumn"></include>
+        from crm_java.good_storage g,crm_java.storage_good s ,crm_java.storage_form f
+        <where>
+            and g.id = s.good_storage_id and s.storage_code = f.storage_code and f.storage_code = #{storageCode}
+        </where>
+    </select>
+    <select id="queryAuditGoodVoByStorageFormCode" parameterType="string" resultType="com.javasm.storage.vo.AuditGoodVO">
+        select bg.id, bg.good_name, bg.type, bc.color_name color, gs.good_serial
+        from good_storage gs,
+             base_good bg,
+             base_color bc,
+             storage_good sg
+        where gs.good_id = bg.id
+          and bg.color_id = bc.id
+          and sg.good_storage_id = gs.id
+          and sg.storage_code = #{code};
+    </select>
+</mapper>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.javasm.storage.mapper.OrderMapper">
+
+    <resultMap id="returnOrder" type="com.javasm.storage.vo.ReturnGoodOrderVO">
+        <id property="returnGoodOrderId" column="id"/>
+        <result property="returnGoodOrderCode" column="order_number"/>
+        <result property="states" column="status_name"/>
+        <result property="returnGoodOrderDate" column="order_date"/>
+    </resultMap>
+    <update id="updageSellOrder">
+
+    </update>
+    <update id="updateSellOrder">
+        update b2c_order
+        set order_status = #{states}
+        where order_number = #{orderCode};
+    </update>
+
+    <select id="pageQuerySellReturnOrder" parameterType="com.javasm.storage.query.ReturnGoodOrderQuery"
+            resultMap="returnOrder">
+
+        select o.id, o.order_number, d.status_name, o.order_date
+        from b2c_order o,
+        b2c_dic d
+        <where>
+            and d.type_id = 3
+            and d.status_id = o.order_status
+            <if test="orderCode != null ">
+                and o.order_number = #{orderCode}
+            </if>
+            <choose>
+                <when test="states!=null">
+                    and o.order_status = #{states}
+                </when>
+                <otherwise>
+                    and o.order_status > 6
+                </otherwise>
+            </choose>
+            <if test="starTime != null  and endTime != null ">
+                and o.order_date <![CDATA[ >= ]]> #{starTime} and o.order_date <![CDATA[ <= ]]> #{endTime}
+            </if>
+        </where>
+    </select>
+    <select id="findSellOrderGood" parameterType="integer" resultType="com.javasm.storage.vo.ReturnGoodVO">
+        select bg.id,bg.good_name,bg.type good_Type,bc.color_name good_color
+        from b2c_order o,b2c_order_goods og,base_good bg,base_color bc
+        where o.id = og.order_id and og.goods_id = bg.id and bg.color_id = bc.id and o.id = #{id};
+    </select>
+
+
+    <select id="pageQuerySellOrder" parameterType="com.javasm.storage.query.SellOrderQuery" resultType="com.javasm.storage.vo.SellOrderVO">
+        select o.id,o.order_number order_code,o.order_date create_time,t.status_name order_type,p.status_name pay_type,s.status_name order_states
+        from b2c_order o ,b2c_dic p,b2c_dic t,b2c_dic s
+        <where>
+             p.type_id=7 and t.type_id=6 and s.type_id=3
+            and o.order_type = t.status_id and o.payment_method =  p.status_id and o.order_status = s.status_id
+            <if test="orderCode != null">and o.order_number = #{orderCode}</if>
+            <if test="orderType != null">and o.order_type = #{orderType}</if>
+            <if test="payType != null">and o.payment_method = #{payType}</if>
+            <choose>
+                <when test="orderStates!=null">
+                    and o.order_status = #{orderStates}
+                </when>
+                <otherwise>
+                    and o.order_status <![CDATA[ < ]]> 7
+                </otherwise>
+            </choose>
+            <if test="starTime != null  and endTime != null ">
+                and o.order_date <![CDATA[ >= ]]> #{starTime} and o.order_date <![CDATA[ <= ]]> #{endTime}
+            </if>
+        </where>
+    </select>
+    <select id="findSellGood" resultType="com.javasm.storage.vo.SellGoodVO">
+        select bg.id,bg.good_name,bg.type good_Type,bc.color_name good_color
+        from b2c_order o,b2c_order_goods og,base_good bg,base_color bc
+        where o.id = og.order_id and og.goods_id = bg.id and bg.color_id = bc.id and o.id = #{id};
+    </select>
+</mapper>

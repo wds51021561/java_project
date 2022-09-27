@@ -1,0 +1,42 @@
+server:
+  port: 8088
+
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://124.221.202.55:2396/crm_java?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: web_db
+    password: 4ibmJ7Cxj2Zwf577
+    #配置邮箱发送的地址
+  mail:
+    #邮箱发送服务器
+    host: smtp.163.com
+    username: wuhandaxuevip@163.com
+    password: DAOHYOSRJIOULVOP
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 400MB
+  task:
+    scheduling:   ##Scheduled调度的线程数量
+      pool:
+        size: 50
+    execution:    ##异步任务线程池的数据  @Async的线程池数量
+      pool:
+        core-size: 8
+#配置日志
+logging:
+  level:
+    com:
+      javasm: debug
+  #日志输出路径
+  file:
+    name: D:\\crm.log
+
+
+
+
+#当mapper不同一个目录加载 mapper配置文件
+mybatis:
+  mapper-locations: classpath:mapper/storage/*.xml,mapper/*.xml

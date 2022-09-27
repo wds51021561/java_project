@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.javasm.storage.mapper.InventoryGoodMapper">
+
+    <select id="queryInventoryGoodByStorageId" resultType="com.javasm.storage.vo.InventoryGoodVO">
+
+        select gs.good_serial,
+        gs.good_id,
+        bg.good_name,
+        bg.type,
+        bc.color_name color,
+        d.status_name storage,
+        count(*) predict
+        from good_storage gs,
+        base_good bg,
+        base_color bc,
+        dic d
+        <where>
+            and gs.good_id = bg.id
+            and bg.color_id = bc.id
+            and d.type_id = 5
+            and gs.storage_id = d.status_id
+            and gs.good_state = 1
+            <if test="id!=0">
+                and gs.storage_id = ${id}
+            </if>
+        </where>
+        group by gs.good_serial
+
+
+    </select>
+    <select id="queryInventoryGoodByCode" resultType="com.javasm.storage.vo.InventoryGoodVO">
+
+        select ig.id,
+        ig.good_id,
+        ig.good_serial,
+        bg.good_name,
+        bg.type,
+        bc.color_name color,
+        ig.predict,
+        ig.actual,
+        ig.inventory_code,
+        ig.remark
+        from inventory_good ig,
+        base_good bg,
+        base_color bc
+        <where>
+            and ig.good_id = bg.id
+            and bg.color_id = bc.id
+            <if test="code!=null and code!=''">
+                and ig.inventory_code = #{code};
+            </if>
+        </where>
+
+    </select>
+</mapper>
