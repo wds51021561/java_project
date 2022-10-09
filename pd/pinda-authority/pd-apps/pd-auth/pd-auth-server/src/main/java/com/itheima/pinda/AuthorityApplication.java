@@ -16,8 +16,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 @SpringBootApplication
-@EnableDiscoveryClient
-@EnableAuthServer
+@EnableDiscoveryClient //开启服务发现客户端
+@EnableAuthServer  //
 @EnableFeignClients(value = {
         "com.itheima.pinda",
 })

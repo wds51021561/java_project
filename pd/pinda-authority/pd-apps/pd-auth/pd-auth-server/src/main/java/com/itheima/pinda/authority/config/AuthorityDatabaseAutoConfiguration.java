@@ -79,7 +79,8 @@ public class AuthorityDatabaseAutoConfiguration extends BaseDatabaseConfiguratio
     @Bean(name = DATABASE_PREFIX + "DruidDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.druid")
     public DataSource druidDataSource() {
-        return DruidDataSourceBuilder.create().build();
+        DataSource dataSource = DruidDataSourceBuilder.create().build();
+        return dataSource;
     }
 
     @Bean(name = DATABASE_PREFIX + "DataSource")
