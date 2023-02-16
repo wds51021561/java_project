@@ -288,7 +288,7 @@ public class SmsSendServiceImpl implements SmsSendService {
      */
     private void pushSmsMessage(TemplateEntity templateEntity, SmsSendDTO smsSendDTO, PlatformEntity platformEntity) {
         // TODO 短信接收服务：将短信信息保存到数据库或者Redis队列
-        /*ReceiveLogEntity entity = new ReceiveLogEntity();
+        ReceiveLogEntity entity = new ReceiveLogEntity();
         entity.setApiLogId(UUID.randomUUID().toString().toUpperCase());
         Long start = System.currentTimeMillis();
         try {
@@ -335,6 +335,6 @@ public class SmsSendServiceImpl implements SmsSendService {
             entity.setBusiness(smsSendDTO.getBatchCode());
 
             receiveLogMapper.insert(entity);
-        }*/
+        }
     }
 }
